@@ -9,22 +9,28 @@ const MAP_OPTIONS = {
 export default function GMapContent() {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
 
   const handleMapClick = useCallback(
     (e: google.maps.MapMouseEvent) => {
-      const latLng = e.latLng;
+      markers.forEach((marker) => {
+        marker.setMap(null);
+      });
+      markers.length = 0; // 配列を空にする
 
+      const latLng = e.latLng;
       const marker = new window.google.maps.Marker({
         position: latLng,
         map,
       });
+      setMarkers((prevMarkers) => [...prevMarkers, marker]);
 
       const infoWindow = new window.google.maps.InfoWindow({
         content: latLng ? `lat: ${latLng.lat()}, lng: ${latLng.lng()}` : "cannot get latLng",
       });
       infoWindow.open(map, marker);
     },
-    [map]
+    [map, markers]
   );
 
   useEffect(() => {
