@@ -14,7 +14,7 @@ def searchClass10sCode(lat, lon):
     jichitaiCode = data["results"]["muniCd"] + "00"
 
     # 自治体コードから一次細分区域のコードをゲット
-    with open('./backend/area.json', 'r', encoding='utf-8') as file:
+    with open('app/area.json', 'r', encoding='utf-8') as file:
         area = json.load(file)
     class15sCode = area["class20s"][jichitaiCode]["parent"]
     class10sCode = area["class15s"][class15sCode]["parent"]
@@ -27,7 +27,7 @@ def searchOfficesCode(lat, lon):
     jichitaiCode = data["results"]["muniCd"] + "00"
 
     # 自治体コードから一次細分区域のコードをゲット
-    with open('./backend/area.json', 'r', encoding='utf-8') as file:
+    with open('app/area.json', 'r', encoding='utf-8') as file:
         area = json.load(file)
     class15sCode = area["class20s"][jichitaiCode]["parent"]
     class10sCode = area["class15s"][class15sCode]["parent"]

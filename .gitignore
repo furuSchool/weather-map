@@ -25,3 +25,6 @@ dist-ssr
 
 myenv
 .env
+__pycache__
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo
