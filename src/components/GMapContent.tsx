@@ -9,28 +9,31 @@ const MAP_OPTIONS = {
 export default function GMapContent() {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  const [marker, setMarker] = useState<google.maps.Marker | null>(null);
+  const [infoWindow] = useState<google.maps.InfoWindow>(new window.google.maps.InfoWindow());
 
   const handleMapClick = useCallback(
     (e: google.maps.MapMouseEvent) => {
-      markers.forEach((marker) => {
-        marker.setMap(null);
-      });
-      markers.length = 0; // 配列を空にする
+      marker?.setMap(null);
 
       const latLng = e.latLng;
-      const marker = new window.google.maps.Marker({
+      const newMarker = new window.google.maps.Marker({
         position: latLng,
         map,
       });
-      setMarkers((prevMarkers) => [...prevMarkers, marker]);
+      setMarker(newMarker);
 
-      const infoWindow = new window.google.maps.InfoWindow({
-        content: latLng ? `lat: ${latLng.lat()}, lng: ${latLng.lng()}` : "cannot get latLng",
+      infoWindow.setContent(
+        latLng ? `lat: ${latLng.lat()}, lng: ${latLng.lng()}` : "cannot get latLng"
+      );
+      infoWindow.open(map, newMarker);
+
+      infoWindow.addListener("close", () => {
+        newMarker.setMap(null);
+        setMarker(null);
       });
-      infoWindow.open(map, marker);
     },
-    [map, markers]
+    [map, marker, infoWindow]
   );
 
   useEffect(() => {
