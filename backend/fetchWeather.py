@@ -7,18 +7,58 @@ def getResponse(url):
         data = response.json()
     return data
 
+def searchClass10sCode(lat, lon):
+    # 緯度・経度から自治体コードをゲット
+    with requests.get(f"https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat={lat}&lon={lon}") as response:
+        data = response.json()
+    jichitaiCode = data["results"]["muniCd"] + "00"
 
-def fetchWeather():
+    # 自治体コードから一次細分区域のコードをゲット
     with open('./backend/area.json', 'r', encoding='utf-8') as file:
         area = json.load(file)
-    pref_code = [k for k, v in area["offices"].items()
-                 if v["name"] == "大東島地方"][0]
-    # weekForecastUrl = f"https://www.jma.go.jp/bosai/forecast/data/forecast/{pref_code}.json"
-    hoursForecastUrl = f"https://www.jma.go.jp/bosai/jmatile/data/wdist/VPFD/{pref_code}.json"
+    class15sCode = area["class20s"][jichitaiCode]["parent"]
+    class10sCode = area["class15s"][class15sCode]["parent"]
+    return class10sCode
 
-    forecast = getResponse(hoursForecastUrl)
-    print(forecast)
+def searchOfficesCode(lat, lon):
+    # 緯度・経度から自治体コードをゲット
+    with requests.get(f"https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat={lat}&lon={lon}") as response:
+        data = response.json()
+    jichitaiCode = data["results"]["muniCd"] + "00"
+
+    # 自治体コードから一次細分区域のコードをゲット
+    with open('./backend/area.json', 'r', encoding='utf-8') as file:
+        area = json.load(file)
+    class15sCode = area["class20s"][jichitaiCode]["parent"]
+    class10sCode = area["class15s"][class15sCode]["parent"]
+    officesCode = area["class10s"][class10sCode]["parent"]
+    return officesCode
+
+
+# 緯度・経度から3日間の予報をゲットする関数
+def fetchThreeDaysForecast(lat, lon):
+    class10sCode = searchClass10sCode(lat, lon)
+    # pref_code = [k for k, v in area["offices"].items() if v["name"] == "大東島地方"][0]
+
+    threeDaysForecastUrl = f"https://www.jma.go.jp/bosai/jmatile/data/wdist/VPFD/{class10sCode}.json"
+
+    forecast = getResponse(threeDaysForecastUrl)
+    return forecast
+    # print(forecast["areaTimeSeries"]["timeDefines"])
+    # print(forecast["areaTimeSeries"]["weather"])
+    # print(forecast["areaTimeSeries"]["wind"])
+    # print(forecast["pointTimeSeries"]["pointNameJP"])
+    # print(forecast["pointTimeSeries"]["temperature"])
     # forecast = getResponse(weekForecastUrl)
     # print(forecast)
 
-fetchWeather()
+# 緯度・経度から週間予報をゲットする関数
+def fetchWeekForecast(lat, lon):
+    officeCode = searchOfficesCode(lat, lon)
+    weekForecastUrl = f"https://www.jma.go.jp/bosai/forecast/data/forecast/{officeCode}.json"
+
+    forecast = getResponse(weekForecastUrl)
+    return forecast
+
+# print(fetchThreeDaysForecast(35.678512, 139.774347))
+# print(fetchWeekForecast(35.678512, 139.774347))
