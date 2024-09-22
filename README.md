@@ -3,10 +3,10 @@
 - 本当はもっと細かいメッシュでの予報を出したい
 
 ## 出典
-- area.json：気象庁ホームページ　（https://www.jma.go.jp/bosai/common/const/area.json）より引用
-- 天気のアイコン：（https://booth.pm/ja/items/3192480）より利用
-- noimage.png：（https://www.shoshinsha-design.com/2020/05/%E3%83%8E%E3%83%BC%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3-no-image-icon/.html）より利用
-- 地域時系列予報：（https://www.jma.go.jp/bosai/jmatile/data/wdist/VPFD/******.json）より引用
+- area.json：気象庁ホームページ　（https://www.jma.go.jp/bosai/common/const/area.json ）より引用
+- 天気のアイコン：（https://booth.pm/ja/items/3192480 ）より利用
+- noimage.png：（https://www.shoshinsha-design.com/2020/05/%E3%83%8E%E3%83%BC%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3-no-image-icon/.html ）より利用
+- 地域時系列予報：（https://www.jma.go.jp/bosai/jmatile/data/wdist/VPFD/******.json ）より引用
 
 ## 参考（一部）
 - https://qiita.com/michan06/items/48503631dd30275288f7
