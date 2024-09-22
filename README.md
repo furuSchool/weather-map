@@ -1,6 +1,12 @@
 ## Weather Map
 - google map 上にお天気を表示するアプリ
 - 本当はもっと細かいメッシュでの予報を出したい
+- 今はローカルホストをサーバーとしている
+
+## 環境構築
+`npm i`して、python3 の環境を作って、必要なライブラリを `pip install` すればOK。`requirements.txt` はちゃんと書いていない。
+- サーバーの起動：`python3 main.py`
+- クライアントの起動：`npm run dev`
 
 ## 出典
 - area.json：気象庁ホームページ　（https://www.jma.go.jp/bosai/common/const/area.json ）より引用
