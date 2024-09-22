@@ -7,9 +7,12 @@ def getResponse(url):
         data = response.json()
     return data
 
+
 def searchClass10sCode(lat, lon):
     # 緯度・経度から自治体コードをゲット
-    with requests.get(f"https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat={lat}&lon={lon}") as response:
+    with requests.get(
+            f"https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat={lat}&lon={lon}"
+    ) as response:
         data = response.json()
     jichitaiCode = data["results"]["muniCd"] + "00"
 
@@ -20,9 +23,12 @@ def searchClass10sCode(lat, lon):
     class10sCode = area["class15s"][class15sCode]["parent"]
     return class10sCode
 
+
 def searchOfficesCode(lat, lon):
     # 緯度・経度から自治体コードをゲット
-    with requests.get(f"https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat={lat}&lon={lon}") as response:
+    with requests.get(
+            f"https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat={lat}&lon={lon}"
+    ) as response:
         data = response.json()
     jichitaiCode = data["results"]["muniCd"] + "00"
 
@@ -43,14 +49,29 @@ def fetchThreeDaysForecast(lat, lon):
     threeDaysForecastUrl = f"https://www.jma.go.jp/bosai/jmatile/data/wdist/VPFD/{class10sCode}.json"
 
     forecast = getResponse(threeDaysForecastUrl)
-    return forecast
-    # print(forecast["areaTimeSeries"]["timeDefines"])
-    # print(forecast["areaTimeSeries"]["weather"])
-    # print(forecast["areaTimeSeries"]["wind"])
-    # print(forecast["pointTimeSeries"]["pointNameJP"])
-    # print(forecast["pointTimeSeries"]["temperature"])
-    # forecast = getResponse(weekForecastUrl)
-    # print(forecast)
+
+    spot = forecast["pointTimeSeries"]["pointNameJP"]
+    baseTime = [
+        item["dateTime"] for item in forecast["areaTimeSeries"]["timeDefines"]
+    ]
+    timeBasedWeather = [item for item in forecast["areaTimeSeries"]["weather"]]
+    timeBasedWind = [item for item in forecast["areaTimeSeries"]["wind"]]
+    timeBasedTemperature = [
+        item for item in forecast["pointTimeSeries"]["temperature"]
+    ]
+
+    return {
+        "spot":
+        spot,
+        "forecast": [{
+            item: {
+                "weather": timeBasedWeather[index],
+                "wind": timeBasedWind[index],
+                "temperature": timeBasedTemperature[index]
+            }
+        } for index, item in enumerate(baseTime)]
+    }
+
 
 # 緯度・経度から週間予報をゲットする関数
 def fetchWeekForecast(lat, lon):
@@ -60,5 +81,6 @@ def fetchWeekForecast(lat, lon):
     forecast = getResponse(weekForecastUrl)
     return forecast
 
-# print(fetchThreeDaysForecast(35.678512, 139.774347))
+
+print(fetchThreeDaysForecast(35.678512, 139.774347))
 # print(fetchWeekForecast(35.678512, 139.774347))
