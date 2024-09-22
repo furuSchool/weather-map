@@ -8,6 +8,9 @@
 - サーバーの起動：`python3 main.py`
 - クライアントの起動：`npm run dev`
 
+Google Map の機能を利用するには API key が必要。
+- https://developers.google.com/maps/documentation/javascript?hl=ja
+
 ## 出典
 - area.json：気象庁ホームページ　（https://www.jma.go.jp/bosai/common/const/area.json ）より引用
 - 天気のアイコン：（https://booth.pm/ja/items/3192480 ）より利用
