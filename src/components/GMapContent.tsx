@@ -234,8 +234,10 @@ export default function GMapContent() {
   }, [mapRef, map]);
 
   useEffect(() => {
-    if (map) {
-      map.addListener("click", handleMapClick);
+    if (!map) return;
+    const  listener = map.addListener("click", handleMapClick);
+    return () => {
+      google.maps.event.removeListener(listener);
     }
   }, [map, handleMapClick]);
 
